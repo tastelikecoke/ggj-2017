@@ -43,18 +43,17 @@ public class EnemyConfig : MonoBehaviour {
 
 	public IEnumerator RaidCR() {
 		for(int idx = 0; idx < raids.Count; idx++) {
-			if(raids[idx].type == RaidType.Delay){
-				yield return new WaitForSeconds(raids[idx].time);
-			}
 			if(raids[idx].type == RaidType.Enemy){
 				GameObject enemy = Instantiate(enemyPrefab);
 				enemy.transform.SetParent(transform, true);
-				Vector2 randomPosition = Random.insideUnitCircle;
+				Vector2 randomPosition = Random.insideUnitCircle.normalized;
 
 				enemy.transform.position = (Vector3)randomPosition * 10f;
 				Enemy enemyScript = enemy.GetComponent<Enemy>();
 				enemyScript.Init(randomPosition * -2f, 0);
 			}
+			
+			yield return new WaitForSeconds(raids[idx].time);
 		}
 		yield return null;
 	}
