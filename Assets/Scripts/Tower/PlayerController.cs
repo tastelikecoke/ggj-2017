@@ -88,20 +88,21 @@ public class PlayerController : MonoBehaviour {
 				otherPlayerEndAngle += 360f;
 			}
 
-			Debug.Log(">>> " + playerNumber + " > "  + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " >> " + otherPlayerStartAngle + " > " + otherPlayerEndAngle);
+//			Debug.Log(">>> " + playerNumber + " > "  + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " >> " + otherPlayerStartAngle + " > " + otherPlayerEndAngle);
 			if (Mathfx.IsAngleBetween(targetStartAngle, targetEndAngle, otherPlayerStartAngle)) {
 				overlapStart = otherPlayerStartAngle;
 				overlapEnd = targetEndAngle;
 				targetEndAngle = otherPlayerStartAngle;
-				handleOverlap |= playerNumber > players[i].playerNumber;
-				Debug.Log(playerNumber + " >> Start: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].startAngle);
+				handleOverlap = true;
+//				handleOverlap |= playerNumber > players[i].playerNumber;
+				Debug.Log(playerNumber + " >> Start: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " > " + players[i].startAngle);
 			} 
 			if (Mathfx.IsAngleBetween(targetStartAngle, targetEndAngle, otherPlayerEndAngle)) {
-				overlapStart = targetStartAngle;
-				overlapEnd = otherPlayerEndAngle;
+//				overlapStart = targetStartAngle;
+//				overlapEnd = otherPlayerEndAngle;
 				targetStartAngle = otherPlayerEndAngle;
-				handleOverlap |= playerNumber > players[i].playerNumber;
-				Debug.Log(playerNumber + " >> End: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].startAngle);
+//				handleOverlap |= playerNumber > players[i].playerNumber;
+				Debug.Log(playerNumber + " >> End: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " > " + players[i].startAngle);
 			}
 		}
 //		Debug.Log("HandleOverlap: " + playerNumber + " > " + handleOverlap);
@@ -112,31 +113,28 @@ public class PlayerController : MonoBehaviour {
 		if (targetStartAngle > targetEndAngle) {
 			targetEndAngle += 360f;
 		}
-		Debug.Log(playerNumber + ">> " + targetStartAngle + " > " + targetEndAngle + " > " + (targetEndAngle - targetStartAngle));
+//		Debug.Log(playerNumber + ">> " + targetStartAngle + " > " + targetEndAngle + " > " + (targetEndAngle - targetStartAngle));
 
 		float totalDelta = targetEndAngle - targetStartAngle;
 		float deltaAngle = (targetEndAngle - targetStartAngle) / numSegments;
 		for (int i = 0; i <= numSegments; i++) {
 			float angle = (targetStartAngle + deltaAngle * i) * Mathf.Deg2Rad;
-			segmentPositions[i] = center + new Vector3(Mathf.Sin(angle), Mathf.Cos(angle), 0f) * (tower.radius + (playerNumber == 2 ? 0.2f : 0f));
+			segmentPositions[i] = center + new Vector3(Mathf.Sin(angle), Mathf.Cos(angle), 0f) * (tower.radius + (playerNumber - 1) * 0.2f);
 		}
 		lineRenderer.SetPositions(segmentPositions);
 
 
 		if (handleOverlap) {
+//			Debug.
 			overlapStart = Mathfx.ConvertAngle(overlapStart);
 			overlapEnd = Mathfx.ConvertAngle(overlapEnd);
 			if (overlapStart > overlapEnd) {
 				overlapEnd += 360f;
 			}
-			Debug.Log("Overlap: " + overlapStart + " > " + overlapEnd);
 
 			// Setup the overlap renderer
 			overlapRenderer.SetVertexCount(numSegments + 1);
 			Vector3[] overlapPositions = new Vector3[numSegments + 1];
-//			if (playerNumber == 2) {
-//				Debug.Log(overlapStart + " > " + overlapEnd + " > " + (overlapEnd - overlapStart));
-//			}
 			float overlapDeltaAngle = (overlapEnd - overlapStart) / numSegments;
 			for (int i = 0; i <= numSegments; i++) {
 				float angle = (overlapStart + overlapDeltaAngle * i) * Mathf.Deg2Rad;
