@@ -113,9 +113,10 @@ public class PlayerController : MonoBehaviour {
 		Vector3 center = tower.transform.position;
 		Vector3[] segmentPositions = new Vector3[numSegments + 1];
 
-		if (playerNumber == 2) {
-			Debug.Log(targetStartAngle + " > " + targetEndAngle + " > " + (targetEndAngle - targetStartAngle));
-		}
+//		if (playerNumber == 2) {
+//			Debug.Log(targetStartAngle + " > " + targetEndAngle + " > " + (targetEndAngle - targetStartAngle));
+//		}
+		float totalDelta = targetEndAngle - targetStartAngle;
 		float deltaAngle = (targetEndAngle - targetStartAngle) / numSegments;
 		for (int i = 0; i <= numSegments; i++) {
 			float angle = (targetStartAngle + deltaAngle * i) * Mathf.Deg2Rad;
