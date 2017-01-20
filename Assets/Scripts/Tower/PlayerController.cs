@@ -57,6 +57,8 @@ public class PlayerController : MonoBehaviour {
 //			position = 90f - Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
 			position = 90f - Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
 		}
+
+
 	}
 
 	void LateUpdate() {
