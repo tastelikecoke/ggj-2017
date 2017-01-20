@@ -11,7 +11,6 @@ namespace PubSub {
 		public Channel type;
 		public object sender;
 		public Hashtable data;
-		
 		public Signal() {
 			type = Channel.Null;
 			sender = null;
