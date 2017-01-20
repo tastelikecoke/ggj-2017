@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour {
 	public void Init(Vector3 movement, int color) {
 		this.movement = movement;
 		this.color = color;
+
+		SpriteRenderer renderer = GetComponentInChildren<SpriteRenderer>();
+		renderer.color = Color.red;
 	}
 	public void Update() {
 		transform.position += movement * Time.deltaTime;
