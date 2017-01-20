@@ -5,6 +5,28 @@ public static class Mathfx {
 
 	public const float TAU = Mathf.PI * 2f;
 
+	public static bool IsAngleBetween(float a, float b, float angle) {
+		a = ConvertAngle(a);
+		b = ConvertAngle(b);
+		if (b < a) {
+			b += 360f;
+			return angle > a && angle < b;
+		} else {
+			angle = ConvertAngle(angle);
+			return angle > a && angle < b;
+		}
+	}
+
+	public static float ConvertAngle(float a) {
+		if (a < -180f) {
+			return a + 360f;
+		}
+		if (a > 180f) {
+			return a - 360f;
+		}
+		return a;
+	}
+
 	public static float SignedAngleBetween(Vector3 a, Vector3 b, Vector3 n) {
 		// angle in [0,180]
 		float angle = Vector3.Angle(a, b);
@@ -34,11 +56,13 @@ public static class Mathfx {
 		return Mathf.Clamp(angle, min, max);
 	}
 
-	public static float ClampToPositiveAngle(float angle, float min, float max) {
-		angle = ClampAngle(angle, min, max);
-		if (angle < 0) {
+	public static float ClampToPositiveAngle(float angle) {
+		while (angle < 0) {
 			angle += 360;
 		}  // if angle negative, convert to 0..360
+		while (angle > 360f) {
+			angle -= 360f;
+		}
 		return angle;
 	}
 
