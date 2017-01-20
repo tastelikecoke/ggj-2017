@@ -7,13 +7,12 @@ public class Enemy : MonoBehaviour {
 	public Vector3 movement;
 	[System.NonSerialized]
 	public int color;
+	public SpriteRenderer eyes;
 
 	public void Init(Vector3 movement, int color) {
 		this.movement = movement;
 		this.color = color;
-
-		SpriteRenderer renderer = GetComponentInChildren<SpriteRenderer>();
-		renderer.color = Color.red;
+		eyes.color = Color.red;
 	}
 	public void Update() {
 		transform.position += movement * Time.deltaTime;
