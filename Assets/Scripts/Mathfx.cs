@@ -8,8 +8,10 @@ public static class Mathfx {
 	public static bool IsAngleBetween(float a, float b, float angle) {
 		a = ConvertAngle(a);
 		b = ConvertAngle(b);
+//		Debug.Log(a + " > " + b + " > " + angle);
 		if (b < a) {
 			b += 360f;
+			angle = ClampToPositiveAngle(angle);
 			return angle > a && angle < b;
 		} else {
 			angle = ConvertAngle(angle);
