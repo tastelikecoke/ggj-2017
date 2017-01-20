@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour {
 	public int numSegments;
 	public float arc; // in degrees
 	public Tower tower;
+	public GameObject projectilePrefab;
 
 	float position = Mathf.Infinity; // in degrees
 
@@ -58,7 +59,19 @@ public class PlayerController : MonoBehaviour {
 			position = 90f - Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
 		}
 
+		if (InputManager.GetButtonDown(playerNumber)) {
+			Fire();
+		}
+	}
 
+	public void Fire() {
+		Debug.Log("Firing");
+		Vector3 v = new Vector3(Mathf.Sin(position * Mathf.Deg2Rad), Mathf.Cos(position * Mathf.Deg2Rad), 0f) * tower.radius;
+		GameObject g = Instantiate(projectilePrefab, v, Quaternion.identity) as GameObject;
+		Projectile p = g.GetComponent<Projectile>();
+		p.direction = v.normalized;
+		p.SetPlayerNumber(playerNumber);
+		g.SetActive(true);
 	}
 
 	void LateUpdate() {

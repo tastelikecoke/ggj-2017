@@ -10,12 +10,14 @@ public class Projectile : MonoBehaviour {
 	List<int> playerNumbers = new List<int>();
 
 	void Start() {
+		direction.Normalize();
+		transform.up = direction;
 	}
 
 	public void SetPlayerNumber(int playerNumber) {
 		playerNumbers.Add(playerNumber);
 		if (playerNumbers.Count == 1) {
-			color = PlayerController.PLAYER_COLORS[playerNumbers[0]];
+			color = PlayerController.PLAYER_COLORS[playerNumbers[0] - 1];
 		} else if (playerNumbers.Count == 2) {
 			if (playerNumbers.Contains(1)) {
 				if (playerNumbers.Contains(2)) {
@@ -28,12 +30,12 @@ public class Projectile : MonoBehaviour {
 			}
 		}
 
-
+		GetComponent<SpriteRenderer>().color = color;
 	}
 
-//	void Update() {
-//
-//	}
+	void Update() {
+		transform.position += direction * speed * Time.deltaTime;
+	}
 
 
 }
