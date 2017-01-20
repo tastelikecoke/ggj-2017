@@ -19,6 +19,7 @@ public static class InputManager {
 			Debug.LogError("Analog of player " + playerNumber + " does not exist.");
 			return Vector2.zero;
 		}
+
 		return new Vector2(Input.GetAxis("C" + playerNumber + "AnalogX"), Input.GetAxis("C" + playerNumber + "AnalogY"));
 	}
 
