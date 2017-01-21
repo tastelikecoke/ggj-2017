@@ -20,9 +20,9 @@ public class Enemy : MonoBehaviour {
 		Vector3 back = new Vector3(0f, 1f, 0f);
 
 		if(movement.x >= 0) {
-			whole.transform.localScale = new Vector3(Mathf.Abs(whole.transform.localScale.x), whole.transform.localScale.y);
+			whole.transform.localScale = new Vector3(Mathf.Abs(whole.transform.localScale.x), whole.transform.localScale.y, whole.transform.localScale.z);
 		} else {
-			whole.transform.localScale = new Vector3(-Mathf.Abs(whole.transform.localScale.x), whole.transform.localScale.y);
+			whole.transform.localScale = new Vector3(-Mathf.Abs(whole.transform.localScale.x), whole.transform.localScale.y, whole.transform.localScale.z);
 		}
 
 		if(Mathf.Abs(Vector3.Angle(back, movement)) < 45f) {
@@ -39,19 +39,13 @@ public class Enemy : MonoBehaviour {
 		Tower.GetInstance().lives--;
 		Explode();
 	}
-
-	public void OnTriggerEnter2D(Collider2D collider) {
-		whole.color = Color.grey;
-	}
-	public void OnTriggerExit2D(Collider2D collider) {
-		whole.color = Color.white;
-	}
-
 	public void Explode() {
 		StartCoroutine(BeginDeathCR());
 	}
 
 	IEnumerator BeginDeathCR(){
+		movement = Vector3.zero;
+		GetComponent<Collider2D>().enabled = false;
 		Animator animator = GetComponent<Animator>();
 		animator.SetTrigger("Death");
 
