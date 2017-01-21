@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void Fire() {
-		Debug.Log("Firing");
+//		Debug.Log("Firing");
 		Vector3 v = new Vector3(Mathf.Sin(position * Mathf.Deg2Rad), Mathf.Cos(position * Mathf.Deg2Rad), 0f) * tower.radius;
 		GameObject g = Instantiate(projectilePrefab, v, Quaternion.identity) as GameObject;
 		Projectile p = g.GetComponent<Projectile>();

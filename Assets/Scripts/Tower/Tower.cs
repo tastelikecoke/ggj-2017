@@ -15,7 +15,7 @@ public class Tower : MonoBehaviour {
 			if (_lives != value) {
 				_lives = value; 
 				eventOnLivesChange();
-				Debug.Log("On lives change");
+//				Debug.Log("On lives change");
 			}
 		} }
 
