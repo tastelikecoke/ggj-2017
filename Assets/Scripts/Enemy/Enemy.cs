@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour {
 			animator.SetTrigger("Back");
 		}
 
-		if(transform.position.magnitude <= 1f) {
+		if (transform.position.magnitude <= Tower.GetInstance().radius) {
 			Explode();
 		}
 	}

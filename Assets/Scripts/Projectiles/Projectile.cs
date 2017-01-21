@@ -65,10 +65,7 @@ public class Projectile : MonoBehaviour {
 		if (e != null) {
 			if (e.enemyColor == color) {
 				e.Explode();
-			} else {
-
 			}
-
 			Destroy(gameObject);
 		}
 	}
