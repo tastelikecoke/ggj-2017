@@ -41,7 +41,7 @@ public class Projectile : MonoBehaviour {
 		GetComponent<SpriteRenderer>().color = color.GetColor();
 	}
 
-	void OnCollisionEnter2D(Collision2D c) {
+	void OnTriggerEnter2D(Collider2D c) {
 		Projectile p = c.gameObject.GetComponent<Projectile>();
 		if (p != null && !isMarkedForDestruction) {
 			int thisCount = playerNumbers.Count;
@@ -66,11 +66,12 @@ public class Projectile : MonoBehaviour {
 			if (e.enemyColor == color) {
 				e.Explode();
 			}
-			StartCoroutine(BeginDeath());
+			StartCoroutine(BeginDeathCR());
 		}
 	}
 
-	public IEnumerator BeginDeath() {
+	public IEnumerator BeginDeathCR() {
+		GetComponent<Collider2D>().enabled = false;
 		SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 		for(int i=0;i<100;i++){
 			Color color = renderer.color;
