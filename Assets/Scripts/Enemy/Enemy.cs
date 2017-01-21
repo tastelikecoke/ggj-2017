@@ -30,8 +30,13 @@ public class Enemy : MonoBehaviour {
 		}
 
 		if (transform.position.magnitude <= Tower.GetInstance().radius) {
-			Explode();
+			OnGetToCenter();
 		}
+	}
+
+	void OnGetToCenter() {
+		Tower.GetInstance().lives--;
+		Explode();
 	}
 
 	public void Explode() {

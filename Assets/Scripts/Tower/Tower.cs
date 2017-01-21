@@ -12,7 +12,11 @@ public class Tower : MonoBehaviour {
 	int _lives = 10;
 	public event Action eventOnLivesChange = () => {};
 	public int lives { get { return _lives; } set { 
-			_lives = value; 
+			if (_lives != value) {
+				_lives = value; 
+				eventOnLivesChange();
+				Debug.Log("On lives change");
+			}
 		} }
 
 	void Awake() {
