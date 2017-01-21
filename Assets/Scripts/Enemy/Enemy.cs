@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour {
 	public Vector3 movement;
 	[System.NonSerialized]
 	public EnemyColor enemyColor;
+	public SpriteRenderer whole;
 	public SpriteRenderer eyes;
 
 	public void Init(Vector3 movement, EnemyColor enemyColor) {
@@ -19,9 +20,9 @@ public class Enemy : MonoBehaviour {
 		Vector3 back = new Vector3(0f, 1f, 0f);
 
 		if(movement.x >= 0) {
-			eyes.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y);
+			whole.transform.localScale = new Vector3(Mathf.Abs(whole.transform.localScale.x), whole.transform.localScale.y);
 		} else {
-			eyes.transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
+			whole.transform.localScale = new Vector3(-Mathf.Abs(whole.transform.localScale.x), whole.transform.localScale.y);
 		}
 
 		if(Mathf.Abs(Vector3.Angle(back, movement)) < 45f) {
@@ -37,6 +38,13 @@ public class Enemy : MonoBehaviour {
 	void OnGetToCenter() {
 		Tower.GetInstance().lives--;
 		Explode();
+	}
+
+	public void OnTriggerEnter2D(Collider2D collider) {
+		whole.color = Color.grey;
+	}
+	public void OnTriggerExit2D(Collider2D collider) {
+		whole.color = Color.white;
 	}
 
 	public void Explode() {

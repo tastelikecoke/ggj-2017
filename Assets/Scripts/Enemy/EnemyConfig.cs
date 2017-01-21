@@ -63,7 +63,7 @@ public class EnemyConfig : MonoBehaviour {
 			enemy.transform.position = (Vector3)randomPosition * 10f;
 
 			Enemy enemyScript = enemy.GetComponent<Enemy>();
-			enemyScript.Init(randomPosition * -2f, raid.color);
+			enemyScript.Init(randomPosition * -1f, raid.color);
 			yield return new WaitForSeconds(raid.time);
 		}
 	}
