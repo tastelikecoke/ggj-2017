@@ -16,6 +16,7 @@ public class Raid {
 	public float startDelay;
 	public float interval;
 	public float killTime;
+	public int numToSpawn;
 
 	public Raid(RaidType type, EnemyColor color, float interval){
 		this.type = type;
@@ -26,7 +27,10 @@ public class Raid {
 
 public class EnemyConfig : MonoBehaviour {
 	
-	private static EnemyConfig _instance;
+	static EnemyConfig _instance;
+	public static EnemyConfig GetInstance() { return _instance; }
+
+	public int numLanes;
 
 	public GameObject enemyPrefab;
 	public List<IEnumerator> activeRaids;
@@ -62,11 +66,13 @@ public class EnemyConfig : MonoBehaviour {
 			GameObject enemy = Instantiate(enemyPrefab);
 			enemy.transform.SetParent(transform, true);
 
-			Vector2 randomPosition = Random.insideUnitCircle.normalized;
-			enemy.transform.position = (Vector3)randomPosition * 10f;
+			int laneToSpawn = Random.Range(0, numLanes);
+			float laneRadians = ((float) laneToSpawn / numLanes) * Mathfx.TAU;
+			Vector2 laneDirection = new Vector2(Mathf.Cos(laneRadians), Mathf.Sin(laneRadians));
+			enemy.transform.position = (Vector3) laneDirection * 10f;
 
 			Enemy enemyScript = enemy.GetComponent<Enemy>();
-			enemyScript.Init(randomPosition * -1f, raid.color);
+			enemyScript.Init(laneDirection * -1f, raid.color);
 			yield return new WaitForSeconds(raid.interval);
 			if (startTime + raid.killTime > Time.time) {
 				yield break;

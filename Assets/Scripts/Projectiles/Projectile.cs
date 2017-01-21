@@ -76,6 +76,7 @@ public class Projectile : MonoBehaviour {
 
 		Enemy e = c.gameObject.GetComponent<Enemy>();
 		if (e != null) {
+			Debug.Log("Enemy is a dude!");
 			if (e.enemyColor == color) {
 				e.Explode();
 			}
@@ -85,12 +86,14 @@ public class Projectile : MonoBehaviour {
 
 	public IEnumerator BeginDeathCR() {
 		GetComponent<Collider2D>().enabled = false;
-		SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+		SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
 		for(int i = 0; i < 100; i++){
-			Color c = renderer.color;
-			c.a *= 0.8f;
-			renderer.color = c;
-			yield return null;
+			for (int o = 0; o < renderers.Length; o++) {
+				Color c = renderers[o].color;
+				c.a *= 0.8f;
+				renderers[o].color = c;
+				yield return null;
+			}
 		}
 		Destroy(gameObject);
 	}
