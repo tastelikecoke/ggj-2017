@@ -48,6 +48,15 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void Explode() {
+		StartCoroutine(BeginDeathCR());
+	}
+
+	IEnumerator BeginDeathCR(){
+		Animator animator = GetComponent<Animator>();
+		animator.SetTrigger("Death");
+
+		yield return new WaitForSeconds(1f);
+		yield return null;
 		Destroy(gameObject);
 	}
 }

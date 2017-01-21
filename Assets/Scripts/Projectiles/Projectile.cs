@@ -66,8 +66,19 @@ public class Projectile : MonoBehaviour {
 			if (e.enemyColor == color) {
 				e.Explode();
 			}
-			Destroy(gameObject);
+			StartCoroutine(BeginDeath());
 		}
+	}
+
+	public IEnumerator BeginDeath() {
+		SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+		for(int i=0;i<100;i++){
+			Color color = renderer.color;
+			color.a *= 0.8f;
+			renderer.color = color;
+			yield return null;
+		}
+		Destroy(gameObject);
 	}
 
 	void Update() {
