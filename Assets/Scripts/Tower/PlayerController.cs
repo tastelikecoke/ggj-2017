@@ -11,13 +11,15 @@ public class PlayerController : MonoBehaviour {
 	public int playerNumber;
 	public int numSegments;
 	public float arc; // in degrees
+	public float arcRegenerationRate;
 	public Tower tower;
 	public GameObject projectilePrefab;
 
 	float position = Mathf.Infinity; // in degrees
+	float arcMultiplier = 1f;
 
-	public float startAngle { get { return Mathfx.ConvertAngle(position - arc / 2f); } }
-	public float endAngle { get { return Mathfx.ConvertAngle(startAngle + arc); } } 
+	public float startAngle { get { return Mathfx.ConvertToSmallestAngle(position - (arc * arcMultiplier) / 2f); } }
+	public float endAngle { get { return Mathfx.ConvertToSmallestAngle(startAngle + (arc * arcMultiplier)); } } 
 
 	public LineRenderer lineRenderer;
 	public LineRenderer overlapRenderer;
@@ -62,6 +64,8 @@ public class PlayerController : MonoBehaviour {
 		if (InputManager.GetButtonDown(playerNumber)) {
 			Fire();
 		}
+
+		arcMultiplier = Mathf.Clamp01(arcMultiplier + Time.deltaTime * arcRegenerationRate);
 	}
 
 	public void Fire() {
@@ -69,9 +73,12 @@ public class PlayerController : MonoBehaviour {
 		Vector3 v = new Vector3(Mathf.Sin(position * Mathf.Deg2Rad), Mathf.Cos(position * Mathf.Deg2Rad), 0f) * tower.radius;
 		GameObject g = Instantiate(projectilePrefab, v, Quaternion.identity) as GameObject;
 		Projectile p = g.GetComponent<Projectile>();
+		p.sizeMultiplier = arcMultiplier;
 		p.direction = v.normalized;
 		p.AddPlayerNumber(playerNumber);
 		g.SetActive(true);
+
+		arcMultiplier *= 0.75f;
 	}
 
 	void LateUpdate() {
@@ -79,7 +86,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void UpdatePosition() {
-		position = Mathfx.ConvertAngle(position);
+		position = Mathfx.ConvertToSmallestAngle(position);
 
 		// Check for overlaps
 		bool handleOverlap = false;
@@ -87,10 +94,6 @@ public class PlayerController : MonoBehaviour {
 		float targetEndAngle = endAngle;
 		float overlapStart = 0f;
 		float overlapEnd = 0f;
-
-//		if (targetStartAngle > targetEndAngle) {
-//			targetEndAngle += 360f;
-//		}
 
 		for (int i = 0; i < players.Count; i++) {
 			if (players[i] == this) {
@@ -103,24 +106,16 @@ public class PlayerController : MonoBehaviour {
 				otherPlayerEndAngle += 360f;
 			}
 
-//			Debug.Log(">>> " + playerNumber + " > "  + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " >> " + otherPlayerStartAngle + " > " + otherPlayerEndAngle);
 			if (Mathfx.IsAngleBetween(targetStartAngle, targetEndAngle, otherPlayerStartAngle)) {
 				overlapStart = otherPlayerStartAngle;
 				overlapEnd = targetEndAngle;
 				targetEndAngle = otherPlayerStartAngle;
 				handleOverlap = true;
-//				handleOverlap |= playerNumber > players[i].playerNumber;
-//				Debug.Log(playerNumber + " >> Start: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " > " + players[i].startAngle);
 			} 
 			if (Mathfx.IsAngleBetween(targetStartAngle, targetEndAngle, otherPlayerEndAngle)) {
-//				overlapStart = targetStartAngle;
-//				overlapEnd = otherPlayerEndAngle;
 				targetStartAngle = otherPlayerEndAngle;
-//				handleOverlap |= playerNumber > players[i].playerNumber;
-//				Debug.Log(playerNumber + " >> End: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " > " + players[i].startAngle);
 			}
 		}
-//		Debug.Log("HandleOverlap: " + playerNumber + " > " + handleOverlap);
 
 		Vector3 center = tower.transform.position;
 		Vector3[] segmentPositions = new Vector3[numSegments + 1];
@@ -128,7 +123,6 @@ public class PlayerController : MonoBehaviour {
 		if (targetStartAngle > targetEndAngle) {
 			targetEndAngle += 360f;
 		}
-//		Debug.Log(playerNumber + ">> " + targetStartAngle + " > " + targetEndAngle + " > " + (targetEndAngle - targetStartAngle));
 
 		float totalDelta = targetEndAngle - targetStartAngle;
 		float deltaAngle = (targetEndAngle - targetStartAngle) / numSegments;
@@ -140,9 +134,8 @@ public class PlayerController : MonoBehaviour {
 
 
 		if (handleOverlap) {
-//			Debug.
-			overlapStart = Mathfx.ConvertAngle(overlapStart);
-			overlapEnd = Mathfx.ConvertAngle(overlapEnd);
+			overlapStart = Mathfx.ConvertToSmallestAngle(overlapStart);
+			overlapEnd = Mathfx.ConvertToSmallestAngle(overlapEnd);
 			if (overlapStart > overlapEnd) {
 				overlapEnd += 360f;
 			}

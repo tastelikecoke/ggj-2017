@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour {
 
 	public float speed = 2f;
 	public Vector3 direction;
+	public float sizeMultiplier;
 
 	EnemyColor color;
 	List<int> playerNumbers = new List<int>();
@@ -16,6 +17,9 @@ public class Projectile : MonoBehaviour {
 	void Start() {
 		direction.Normalize();
 		transform.up = direction;
+		Vector3 s = transform.localScale;
+		s.x *= sizeMultiplier;
+		transform.localScale = s;
 	}
 
 	public void AddPlayerNumber(int playerNumber) {
@@ -73,10 +77,10 @@ public class Projectile : MonoBehaviour {
 	public IEnumerator BeginDeathCR() {
 		GetComponent<Collider2D>().enabled = false;
 		SpriteRenderer renderer = GetComponent<SpriteRenderer>();
-		for(int i=0;i<100;i++){
-			Color color = renderer.color;
-			color.a *= 0.8f;
-			renderer.color = color;
+		for(int i = 0; i < 100; i++){
+			Color c = renderer.color;
+			c.a *= 0.8f;
+			renderer.color = c;
 			yield return null;
 		}
 		Destroy(gameObject);
