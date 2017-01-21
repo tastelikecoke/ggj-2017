@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour {
 		GameObject g = Instantiate(projectilePrefab, v, Quaternion.identity) as GameObject;
 		Projectile p = g.GetComponent<Projectile>();
 		p.direction = v.normalized;
-		p.SetPlayerNumber(playerNumber);
+		p.AddPlayerNumber(playerNumber);
 		g.SetActive(true);
 	}
 
