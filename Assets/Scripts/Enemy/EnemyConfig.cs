@@ -12,12 +12,15 @@ public enum RaidType {
 public class Raid {
 	public RaidType type;
 	public EnemyColor color;
-	public float time;
 
-	public Raid(RaidType type, EnemyColor color, float time){
+	public float startDelay;
+	public float interval;
+	public float killTime;
+
+	public Raid(RaidType type, EnemyColor color, float interval){
 		this.type = type;
 		this.color = color;
-		this.time = time;
+		this.interval = interval;
 	}
 }
 
@@ -28,8 +31,7 @@ public class EnemyConfig : MonoBehaviour {
 	public GameObject enemyPrefab;
 	public List<IEnumerator> activeRaids;
 
-	public Raid redRaid1;
-	public Raid yellowRaid1;
+	public Raid[] raids;
 
 	void OnEnable() {
 		if (_instance == null) {
@@ -43,18 +45,19 @@ public class EnemyConfig : MonoBehaviour {
 	}
 
 	public void InitRaids() {
-		IEnumerator yellowRaid = RaidCR(redRaid1);
-		StartCoroutine(yellowRaid);
-
-		IEnumerator redRaid = RaidCR(yellowRaid1);
-		StartCoroutine(redRaid);
-
+		for (int i = 0; i < raids.Length; i++) {
+			StartCoroutine(RaidCR(raids[i]));
+		}
 	}
+
 	public void Start() {
 		InitRaids();
 	}
 
 	public IEnumerator RaidCR(Raid raid) {
+		yield return new WaitForSeconds(raid.startDelay);
+
+		float startTime = Time.time;
 		while(true) {
 			GameObject enemy = Instantiate(enemyPrefab);
 			enemy.transform.SetParent(transform, true);
@@ -64,7 +67,10 @@ public class EnemyConfig : MonoBehaviour {
 
 			Enemy enemyScript = enemy.GetComponent<Enemy>();
 			enemyScript.Init(randomPosition * -2f, raid.color);
-			yield return new WaitForSeconds(raid.time);
+			yield return new WaitForSeconds(raid.interval);
+			if (startTime + raid.killTime > Time.time) {
+				yield break;
+			}
 		}
 	}
 }
