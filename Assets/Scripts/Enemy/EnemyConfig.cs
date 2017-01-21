@@ -50,7 +50,7 @@ public class EnemyConfig : MonoBehaviour {
 
 				enemy.transform.position = (Vector3)randomPosition * 10f;
 				Enemy enemyScript = enemy.GetComponent<Enemy>();
-				enemyScript.Init(randomPosition * -2f, 0);
+				enemyScript.Init(randomPosition * -2f, Random.Range(0, 2) == 0 ? EnemyColor.Red : EnemyColor.Yellow);
 			}
 			
 			yield return new WaitForSeconds(raids[idx].time);
