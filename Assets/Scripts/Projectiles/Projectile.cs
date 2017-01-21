@@ -17,6 +17,12 @@ public class Projectile : MonoBehaviour {
 	void Start() {
 		direction.Normalize();
 		transform.up = direction;
+		UpdateScale();
+
+		Destroy(gameObject, 10f);
+	}
+
+	void UpdateScale() {
 		Vector3 s = transform.localScale;
 		s.x *= sizeMultiplier;
 		transform.localScale = s;
@@ -27,7 +33,7 @@ public class Projectile : MonoBehaviour {
 		UpdatePlayerNumbers();
 	}
 
-	public void UpdatePlayerNumbers() {
+	void UpdatePlayerNumbers() {
 		if (playerNumbers.Count == 1) {
 			color = EnemyColorExtensions.GetEnemyColorFromPlayerNumber(playerNumbers[0]);
 		} else if (playerNumbers.Count == 2) {
@@ -60,6 +66,9 @@ public class Projectile : MonoBehaviour {
 			playerNumbers = playerNumbers.Union(p.playerNumbers).ToList();
 			transform.up = direction;
 			UpdatePlayerNumbers();
+
+			sizeMultiplier = ((sizeMultiplier * thisCount) + (p.sizeMultiplier * themCount)) / (thisCount + themCount);
+			UpdateScale();
 
 			p.isMarkedForDestruction = true;
 			Destroy(p.gameObject);
