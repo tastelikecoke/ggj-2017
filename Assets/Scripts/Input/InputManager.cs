@@ -20,6 +20,12 @@ public static class InputManager {
 			return Vector2.zero;
 		}
 
+		// Debug
+		if (Input.GetMouseButtonDown(playerNumber - 1)) {
+			return (Vector2) Input.mousePosition - new Vector2(Screen.width / 2f, Screen.height / 2f);
+		}
+
+
 		return new Vector2(Input.GetAxis("C" + playerNumber + "AnalogX"), Input.GetAxis("C" + playerNumber + "AnalogY"));
 	}
 
@@ -28,6 +34,11 @@ public static class InputManager {
 			Debug.LogError("Fuck you once.");
 			return false;
 		}
+
+		if (Input.GetMouseButtonDown(playerNumber - 1)) {
+			return true;
+		}
+
 		return Input.GetButtonDown("C" + playerNumber + "A");
 	}
 
