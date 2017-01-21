@@ -6,20 +6,20 @@ public static class Mathfx {
 	public const float TAU = Mathf.PI * 2f;
 
 	public static bool IsAngleBetween(float a, float b, float angle) {
-		a = ConvertAngle(a);
-		b = ConvertAngle(b);
+		a = ConvertToSmallestAngle(a);
+		b = ConvertToSmallestAngle(b);
 //		Debug.Log(a + " > " + b + " > " + angle);
 		if (b < a) {
 			b += 360f;
 			angle = ClampToPositiveAngle(angle);
 			return angle > a && angle < b;
 		} else {
-			angle = ConvertAngle(angle);
+			angle = ConvertToSmallestAngle(angle);
 			return angle > a && angle < b;
 		}
 	}
 
-	public static float ConvertAngle(float a) {
+	public static float ConvertToSmallestAngle(float a) {
 		if (a < -180f) {
 			return a + 360f;
 		}
