@@ -19,10 +19,9 @@ public class Enemy : MonoBehaviour {
 		Vector3 back = new Vector3(0f, 1f, 0f);
 
 		if(movement.x >= 0) {
-			transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y);
-		}
-		else {
-			transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
+			eyes.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y);
+		} else {
+			eyes.transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
 		}
 
 		if(Mathf.Abs(Vector3.Angle(back, movement)) < 45f) {
