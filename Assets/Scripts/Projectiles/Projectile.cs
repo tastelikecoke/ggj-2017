@@ -8,7 +8,7 @@ public class Projectile : MonoBehaviour {
 	public float speed = 2f;
 	public Vector3 direction;
 
-	Color color;
+	EnemyColor color;
 	List<int> playerNumbers = new List<int>();
 
 	bool isMarkedForDestruction = false;
@@ -25,20 +25,20 @@ public class Projectile : MonoBehaviour {
 
 	public void UpdatePlayerNumbers() {
 		if (playerNumbers.Count == 1) {
-			color = PlayerController.PLAYER_COLORS[playerNumbers[0] - 1];
+			color = EnemyColorExtensions.GetEnemyColorFromPlayerNumber(playerNumbers[0]);
 		} else if (playerNumbers.Count == 2) {
 			if (playerNumbers.Contains(1)) {
 				if (playerNumbers.Contains(2)) {
-					color = new Color(1f, 0.5f, 0f); // orange
+					color = EnemyColor.Orange;
 				} else if (playerNumbers.Contains(3)) {
-					color = new Color(1f, 0f, 1f); // violet
+					color = EnemyColor.Violet;
 				}
 			} else if (playerNumbers.Contains(2)) {
-				color = new Color(0f, 1f, 0f); // green
+				color = EnemyColor.Green;
 			}
 		}
 
-		GetComponent<SpriteRenderer>().color = color;
+		GetComponent<SpriteRenderer>().color = color.GetColor();
 	}
 
 	void OnCollisionEnter2D(Collision2D c) {
@@ -59,6 +59,17 @@ public class Projectile : MonoBehaviour {
 
 			p.isMarkedForDestruction = true;
 			Destroy(p.gameObject);
+		}
+
+		Enemy e = c.gameObject.GetComponent<Enemy>();
+		if (e != null) {
+			if (e.enemyColor == color) {
+				e.Explode();
+			} else {
+
+			}
+
+			Destroy(gameObject);
 		}
 	}
 

@@ -110,14 +110,14 @@ public class PlayerController : MonoBehaviour {
 				targetEndAngle = otherPlayerStartAngle;
 				handleOverlap = true;
 //				handleOverlap |= playerNumber > players[i].playerNumber;
-				Debug.Log(playerNumber + " >> Start: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " > " + players[i].startAngle);
+//				Debug.Log(playerNumber + " >> Start: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " > " + players[i].startAngle);
 			} 
 			if (Mathfx.IsAngleBetween(targetStartAngle, targetEndAngle, otherPlayerEndAngle)) {
 //				overlapStart = targetStartAngle;
 //				overlapEnd = otherPlayerEndAngle;
 				targetStartAngle = otherPlayerEndAngle;
 //				handleOverlap |= playerNumber > players[i].playerNumber;
-				Debug.Log(playerNumber + " >> End: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " > " + players[i].startAngle);
+//				Debug.Log(playerNumber + " >> End: " + targetStartAngle + " > " + targetEndAngle + " > " + players[i].playerNumber + " > " + players[i].startAngle);
 			}
 		}
 //		Debug.Log("HandleOverlap: " + playerNumber + " > " + handleOverlap);
