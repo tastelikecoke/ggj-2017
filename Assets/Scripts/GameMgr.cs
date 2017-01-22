@@ -105,7 +105,7 @@ public class GameMgr : MonoBehaviour {
 		Debug.Log("you lost!");
 		//fade out to the title screen
 		FadeOutOverlay.Instance.FadeOut(1.5f, () => {
-			StopGameUnits();
+			//StopGameUnits();
 			UnityEngine.SceneManagement.SceneManager.LoadScene("Start");
 		}); //Application.LoadLevel("Start"));
 	}

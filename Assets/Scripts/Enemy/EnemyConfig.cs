@@ -70,6 +70,7 @@ public class EnemyConfig : MonoBehaviour {
 		while(true) {
 			for (int i = 0; i < raid.numToSpawn; i++) {
 				GameObject enemy = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+				enemy.name = "Enemy_"+raid.color;
 				enemy.transform.SetParent(transform, true);
 
 				int laneToSpawn = Random.Range(0, numLanes);
