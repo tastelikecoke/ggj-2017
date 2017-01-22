@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour {
 			}
 
 			if (found) {
+				AudioPlayer.GetInstance().PlaySwitchSFX();
 				shootColor = possibleColors[i];
 				UpdateColors();
 				break;

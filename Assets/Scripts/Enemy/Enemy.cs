@@ -48,6 +48,7 @@ public class Enemy : MonoBehaviour {
 
 	IEnumerator BeginDeathCR(){
 		Instantiate(explosionPrefab).transform.position = transform.position;
+		AudioPlayer.GetInstance().PlayExplodeSFX();
 
 		movement = Vector3.zero;
 		spriteCollider.enabled = false;
