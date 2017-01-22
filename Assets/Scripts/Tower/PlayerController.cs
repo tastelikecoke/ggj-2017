@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour {
 	public Tower tower;
 	public GameObject projectilePrefab;
 
+	public GameObject indicatorParent;
+	public SpriteRenderer indicatorSprite;
+
 	public EnemyColor shootColor { get; protected set; }
 
 	float position = Mathf.Infinity; // in degrees
@@ -137,10 +140,12 @@ public class PlayerController : MonoBehaviour {
 
 	void UpdateColors() {
 		lineRenderer.SetColors(shootColor.GetColor(), shootColor.GetColor());
+		indicatorSprite.color = shootColor.GetColor();
 	}
 
 	void UpdatePosition() {
 		position = Mathfx.ConvertToSmallestAngle(position);
+		indicatorParent.transform.rotation = Quaternion.Euler(0, 0, -position);
 
 		// Check for overlaps
 		bool handleOverlap = false;
