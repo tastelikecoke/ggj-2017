@@ -33,5 +33,6 @@ public class PingSpawner : MonoBehaviour {
 			c.a = f;
 			g.GetComponent<SpriteRenderer>().color = c;
 		});
+		Destroy(g, duration);
 	}
 }
