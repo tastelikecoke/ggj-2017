@@ -32,6 +32,10 @@ public class GameMgr : MonoBehaviour {
 	public EnemyConfig enemySpawner;
 	public LifeUpdater lifeUpdater;
 
+	public UnityEngine.UI.Text textTimer;
+
+	private float _timer = 0f;
+
 	StateMachine<GameStates> fsm;
 
 	void Awake() {
@@ -74,6 +78,7 @@ public class GameMgr : MonoBehaviour {
 	void Start_Enter() {
 		Debug.Log("Game start state");
 		StopGameUnits();
+		_timer = 0f;
 	}
 
 	void Start_Update() {
@@ -85,12 +90,20 @@ public class GameMgr : MonoBehaviour {
 	void Play_Enter() {
 		Debug.Log("Game play state");
 		StartGameUnits();
+		_timer = 0f;
+		textTimer.text = "00:00";
 	}
 
 	void Play_Update() {
 		if (tower.lives <= 0) {
 			fsm.ChangeState(GameStates.Lose);
 		}
+		_timer += Time.deltaTime;
+		int minutes = (int)(_timer/60);
+		int seconds = (int)(_timer - minutes*(60));
+		string textMinutes = minutes > 9 ? ""+minutes : "0"+minutes;
+		string textSeconds = seconds > 9 ? ""+seconds : "0"+seconds;
+		textTimer.text = textMinutes + ":" + textSeconds;
 	}
 
 	void Play_Exit() {
