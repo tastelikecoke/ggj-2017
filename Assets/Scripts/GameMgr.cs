@@ -28,6 +28,16 @@ public class GameMgr : MonoBehaviour {
 	[SerializeField]
 	private float _difficulty;
 
+	public Tower tower;
+	public EnemyConfig enemySpawner;
+	public LifeUpdater lifeUpdater;
+
+	StateMachine<GameStates> fsm;
+
+	void Awake() {
+		fsm = StateMachine<GameStates>.Initialize(this, GameStates.Start);
+	}
+
 	void OnEnable() {
 		if (_instance == null) {
 			_instance = this;
@@ -45,19 +55,42 @@ public class GameMgr : MonoBehaviour {
 		get { return _instance; }
 	}
 
+	void StartGameUnits() {
+		if (tower.gameObject.activeInHierarchy) return;
+
+		tower.gameObject.SetActive(true);
+		enemySpawner.gameObject.SetActive(true);
+		lifeUpdater.OnStart();
+	}
+	void StopGameUnits() {
+		if (!tower.gameObject.activeInHierarchy) return;
+
+		lifeUpdater.OnStop();
+		tower.gameObject.SetActive(false);
+		enemySpawner.gameObject.SetActive(false);
+	}
+
 	//start state
 	void Start_Enter() {
 		Debug.Log("Game start state");
+		StopGameUnits();
+	}
+
+	void Start_Update() {
+		fsm.ChangeState(GameStates.Play,StateTransition.Overwrite);
 	}
 
 	//game state
 	#region PLAY_STATE
 	void Play_Enter() {
 		Debug.Log("Game play state");
+		StartGameUnits();
 	}
 
 	void Play_Update() {
-
+		if (tower.lives <= 0) {
+			fsm.ChangeState(GameStates.Lose);
+		}
 	}
 
 	void Play_Exit() {
@@ -65,29 +98,15 @@ public class GameMgr : MonoBehaviour {
 	}
 	#endregion
 
-	//win state
-	#region WIN_STATE
-	void Win_Enter() {
-
-	}
-
-	void Win_Update() {
-
-	}
-
-	void Win_Exit() {
-
-	}
-	#endregion
-
 	//lose state
 	#region LOSE_STATE
 	void Lose_Enter() {
-
+		StopGameUnits();
+		Debug.Log("you lost!");
+		//fade out to the title screen
 	}
 
 	void Lose_Update() {
-
 	}
 
 	void Lose_Exit() {

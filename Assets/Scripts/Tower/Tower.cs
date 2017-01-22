@@ -24,6 +24,9 @@ public class Tower : MonoBehaviour {
 		}
 	}
 
+	public void ResetLives() {
+		lives = 10;
+	}
 
 	void Awake() {
 		__instance = this;
