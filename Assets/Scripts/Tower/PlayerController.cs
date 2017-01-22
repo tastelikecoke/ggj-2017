@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
 
+
 	static List<PlayerController> players = new List<PlayerController>();
 
 	public int playerNumber;
@@ -35,6 +36,10 @@ public class PlayerController : MonoBehaviour {
 	void Awake() {
 		players.Add(this);
 		players.Sort((a, b) => a.playerNumber - b.playerNumber);
+	}
+
+	void OnDestroy() {
+		players.Clear();
 	}
 
 	void Start () {
