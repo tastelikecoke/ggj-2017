@@ -108,6 +108,18 @@ public class PlayerController : MonoBehaviour {
 		p.AddPlayerNumber(this);
 		g.SetActive(true);
 
+		switch (shootColor) {
+		case EnemyColor.Blue:
+			AudioPlayer.GetInstance().PlayBlueSFX();
+			break;
+		case EnemyColor.Red:
+			AudioPlayer.GetInstance().PlayRedSFX();
+			break;
+		case EnemyColor.Yellow:
+			AudioPlayer.GetInstance().PlayYellowSFX();
+			break;
+		}
+
 		canArcGrow = false;
 		arcMultiplier = Mathf.Clamp01(arcMultiplier - arcDegenerationRate);
 		LeanTween.cancel(gameObject);
