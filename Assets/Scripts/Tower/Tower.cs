@@ -10,7 +10,7 @@ public class Tower : MonoBehaviour {
 
 	public float radius;
 
-	public int MAX_LIVES = 10;
+	public int MAX_LIVES;
 	int _lives = 10;
 	public event Action eventOnLivesChange = () => {};
 
