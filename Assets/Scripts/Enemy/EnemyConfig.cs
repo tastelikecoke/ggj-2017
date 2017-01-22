@@ -41,7 +41,7 @@ public class EnemyConfig : MonoBehaviour {
 	void OnEnable() {
 		if (_instance == null) {
 			_instance = this;
-			DontDestroyOnLoad(this);
+//			DontDestroyOnLoad(this);
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class EnemyConfig : MonoBehaviour {
 		float startTime = Time.time;
 		while(true) {
 			for (int i = 0; i < raid.numToSpawn; i++) {
-				GameObject enemy = Instantiate(enemyPrefab);
+				GameObject enemy = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 				enemy.transform.SetParent(transform, true);
 
 				int laneToSpawn = Random.Range(0, numLanes);
