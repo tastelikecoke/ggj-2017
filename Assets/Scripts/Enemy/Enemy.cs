@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour {
 	public EnemyColor enemyColor;
 	public SpriteRenderer whole;
 	public SpriteRenderer eyes;
+	public GameObject explosionPrefab;
 
 	Collider2D spriteCollider;
 
@@ -38,6 +39,8 @@ public class Enemy : MonoBehaviour {
 
 	void OnGetToCenter() {
 		Tower.GetInstance().lives--;
+		Instantiate(explosionPrefab).transform.position = transform.position;
+		
 		Explode();
 	}
 	public void Explode() {
