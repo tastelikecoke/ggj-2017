@@ -8,7 +8,7 @@ public class InputTester : MonoBehaviour {
 			if (InputManager.GetAnalogOfController(i) != Vector2.zero) {
 				Debug.Log("Player " + i + " moving!");
 			}
-			if (InputManager.GetButton(i)) {
+			if (InputManager.GetFireButton(i)) {
 				Debug.Log("Player " + i + " thing!");
 			}
 		}

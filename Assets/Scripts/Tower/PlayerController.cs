@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
 
-	public static readonly Color[] PLAYER_COLORS = { Color.red, Color.yellow, Color.blue } ;
 	static List<PlayerController> players = new List<PlayerController>();
 
 	public int playerNumber;
@@ -16,6 +15,8 @@ public class PlayerController : MonoBehaviour {
 	public float arcGrowthDelay;
 	public Tower tower;
 	public GameObject projectilePrefab;
+
+	public EnemyColor shootColor;
 
 	float position = Mathf.Infinity; // in degrees
 	float arcMultiplier = 1f;
@@ -48,10 +49,12 @@ public class PlayerController : MonoBehaviour {
 //		Debug.Log(Mathfx.IsAngleBetween(-90, 90, -100)); // false
 //		Debug.Log(Mathfx.IsAngleBetween(170, 10, 180)); // true
 
+		shootColor = playerNumber == 1 ? EnemyColor.Red : EnemyColor.Blue;
+
 		lineRenderer = GetComponent<LineRenderer>();
 		lineRenderer.SetVertexCount(numSegments + 1);
-		lineRenderer.SetColors(PLAYER_COLORS[playerNumber - 1], PLAYER_COLORS[playerNumber - 1]);
 		lineRenderer.sortingOrder = playerNumber * 2;
+		UpdateColors();
 
 		position = 0 + 90f * (playerNumber - 1);
 	}
@@ -63,8 +66,12 @@ public class PlayerController : MonoBehaviour {
 			position = 90f - Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
 		}
 
-		if (InputManager.GetButtonDown(playerNumber)) {
+		if (InputManager.GetFireButtonDown(playerNumber)) {
 			Fire();
+		}
+
+		if (InputManager.GetSwitchButtonDown(playerNumber)) {
+			SwitchColor();
 		}
 
 		if (canArcGrow) {
@@ -72,7 +79,26 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	public void Fire() {
+	void SwitchColor() {
+		EnemyColor[] possibleColors = new[] { EnemyColor.Red, EnemyColor.Yellow, EnemyColor.Blue };
+		for (int i = 0; i < possibleColors.Length; i++) {
+			bool found = true;
+			for (int o = 0; o < players.Count; o++) {
+				if (players[o].shootColor == possibleColors[i]) {
+					found = false;
+					break;
+				}
+			}
+
+			if (found) {
+				shootColor = possibleColors[i];
+				UpdateColors();
+				break;
+			}
+		}
+	}
+
+	void Fire() {
 //		Debug.Log("Firing");
 		Vector3 v = new Vector3(Mathf.Sin(position * Mathf.Deg2Rad), Mathf.Cos(position * Mathf.Deg2Rad), 0f) * tower.radius;
 		GameObject g = Instantiate(projectilePrefab, v, Quaternion.identity) as GameObject;
@@ -90,6 +116,10 @@ public class PlayerController : MonoBehaviour {
 
 	void LateUpdate() {
 		UpdatePosition();
+	}
+
+	void UpdateColors() {
+		lineRenderer.SetColors(shootColor.GetColor(), shootColor.GetColor());
 	}
 
 	void UpdatePosition() {

@@ -5,7 +5,7 @@ public class TitleScreen : MonoBehaviour {
 
 	public Animator animator;
 	void Update() {
-		if(InputManager.GetButtonDown(1)) {
+		if(InputManager.GetFireButtonDown(1)) {
 			animator.SetTrigger("Next");
 		}
 	}
