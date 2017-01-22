@@ -39,15 +39,16 @@ public class Enemy : MonoBehaviour {
 
 	void OnGetToCenter() {
 		Tower.GetInstance().lives--;
-		Instantiate(explosionPrefab).transform.position = transform.position;
-		
 		Explode();
 	}
+
 	public void Explode() {
 		StartCoroutine(BeginDeathCR());
 	}
 
 	IEnumerator BeginDeathCR(){
+		Instantiate(explosionPrefab).transform.position = transform.position;
+
 		movement = Vector3.zero;
 		spriteCollider.enabled = false;
 
