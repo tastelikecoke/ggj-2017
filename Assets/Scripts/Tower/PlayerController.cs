@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour {
 
 	public LineRenderer lineRenderer;
 	public LineRenderer overlapRenderer;
+	public Sprite spriteToUse;
 
 	void Awake() {
 		players.Add(this);
@@ -55,6 +56,10 @@ public class PlayerController : MonoBehaviour {
 		lineRenderer.SetVertexCount(numSegments + 1);
 		lineRenderer.sortingOrder = playerNumber * 2;
 		UpdateColors();
+
+		MaterialPropertyBlock m = new MaterialPropertyBlock();
+		m.SetTexture("_MainTex", (Texture) spriteToUse.texture);
+		lineRenderer.SetPropertyBlock(m);
 
 		position = 0 + 90f * (playerNumber - 1);
 	}
