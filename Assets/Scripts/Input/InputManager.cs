@@ -25,11 +25,26 @@ public static class InputManager {
 			return (Vector2) Input.mousePosition - new Vector2(Screen.width / 2f, Screen.height / 2f);
 		}
 
-
 		return new Vector2(Input.GetAxis("C" + playerNumber + "AnalogX"), Input.GetAxis("C" + playerNumber + "AnalogY"));
 	}
 
-	public static bool GetButtonDown(int playerNumber) {
+	public static bool GetSwitchButtonDown(int playerNumber) {
+		if (playerNumber < 1 || playerNumber > 4) {
+			Debug.LogError("Fuck you half.");
+			return false;
+		}
+
+		if (Input.GetKeyDown(KeyCode.Alpha1) && playerNumber == 1) {
+			return true;
+		}
+		if (Input.GetKeyDown(KeyCode.Alpha2) && playerNumber == 2) {
+			return true;
+		}
+
+		return Input.GetButtonDown("C" + playerNumber + "B");
+	}
+
+	public static bool GetFireButtonDown(int playerNumber) {
 		if (playerNumber < 1 || playerNumber > 4) {
 			Debug.LogError("Fuck you once.");
 			return false;
@@ -42,14 +57,15 @@ public static class InputManager {
 		return Input.GetButtonDown("C" + playerNumber + "A");
 	}
 
-	public static bool GetButtonUp(int playerNumber) {
+	public static bool GetFireButtonUp(int playerNumber) {
 		if (playerNumber < 1 || playerNumber > 4) {
 			Debug.LogError("Fuck you twice.");
 			return false;
 		}
 		return Input.GetButtonUp("C" + playerNumber + "A");
 	}
-	public static bool GetButton(int playerNumber) {
+
+	public static bool GetFireButton(int playerNumber) {
 		if (playerNumber < 1 || playerNumber > 4) {
 			Debug.LogError("Fuck you thrice.");
 			return false;

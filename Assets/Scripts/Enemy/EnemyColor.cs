@@ -35,6 +35,8 @@ public static class EnemyColorExtensions {
 			return Color.red;
 		case EnemyColor.Yellow:
 			return Color.yellow;
+		case EnemyColor.Blue:
+			return Color.blue;
 		case EnemyColor.Orange:
 			return new Color(1f, 0.5f, 0f);
 		case EnemyColor.Green:

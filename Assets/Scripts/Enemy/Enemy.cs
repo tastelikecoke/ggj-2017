@@ -10,6 +10,12 @@ public class Enemy : MonoBehaviour {
 	public SpriteRenderer whole;
 	public SpriteRenderer eyes;
 
+	Collider2D spriteCollider;
+
+	void Start() {
+		spriteCollider = GetComponent<Collider2D>();
+	}
+
 	public void Init(Vector3 movement, EnemyColor enemyColor) {
 		this.movement = movement;
 		this.enemyColor = enemyColor;
@@ -18,19 +24,14 @@ public class Enemy : MonoBehaviour {
 	public void Update() {
 		transform.position += movement * Time.deltaTime;
 		Vector3 back = new Vector3(0f, 1f, 0f);
+		whole.transform.localScale = new Vector3((movement.x >= 0 ? 1 : -1) * Mathf.Abs(whole.transform.localScale.x), whole.transform.localScale.y, whole.transform.localScale.z);
 
-		if(movement.x >= 0) {
-			whole.transform.localScale = new Vector3(Mathf.Abs(whole.transform.localScale.x), whole.transform.localScale.y, whole.transform.localScale.z);
-		} else {
-			whole.transform.localScale = new Vector3(-Mathf.Abs(whole.transform.localScale.x), whole.transform.localScale.y, whole.transform.localScale.z);
-		}
+//		if(Mathf.Abs(Vector3.Angle(back, movement)) < 45f) {
+//			Animator animator = GetComponent<Animator>();
+//			animator.SetTrigger("Back");
+//		}
 
-		if(Mathf.Abs(Vector3.Angle(back, movement)) < 45f) {
-			Animator animator = GetComponent<Animator>();
-			animator.SetTrigger("Back");
-		}
-
-		if (transform.position.magnitude <= Tower.GetInstance().radius) {
+		if (spriteCollider.enabled && transform.position.magnitude <= Tower.GetInstance().radius) {
 			OnGetToCenter();
 		}
 	}
@@ -45,7 +46,8 @@ public class Enemy : MonoBehaviour {
 
 	IEnumerator BeginDeathCR(){
 		movement = Vector3.zero;
-		GetComponent<Collider2D>().enabled = false;
+		spriteCollider.enabled = false;
+
 		Animator animator = GetComponent<Animator>();
 		animator.SetTrigger("Death");
 

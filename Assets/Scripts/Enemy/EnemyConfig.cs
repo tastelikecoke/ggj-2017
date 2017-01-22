@@ -12,24 +12,32 @@ public enum RaidType {
 public class Raid {
 	public RaidType type;
 	public EnemyColor color;
-	public float time;
 
-	public Raid(RaidType type, EnemyColor color, float time){
+	public float startDelay;
+	public float interval;
+	public float killTime;
+	public int numToSpawn;
+	public float moveSpeed;
+
+	public Raid(RaidType type, EnemyColor color, float interval){
 		this.type = type;
 		this.color = color;
-		this.time = time;
+		this.interval = interval;
 	}
 }
 
 public class EnemyConfig : MonoBehaviour {
 	
-	private static EnemyConfig _instance;
+	static EnemyConfig _instance;
+	public static EnemyConfig GetInstance() { return _instance; }
+
+	public int numLanes;
+	public float spawnRadius;
 
 	public GameObject enemyPrefab;
 	public List<IEnumerator> activeRaids;
 
-	public Raid redRaid1;
-	public Raid yellowRaid1;
+	public Raid[] raids;
 
 	void OnEnable() {
 		if (_instance == null) {
@@ -43,28 +51,37 @@ public class EnemyConfig : MonoBehaviour {
 	}
 
 	public void InitRaids() {
-		IEnumerator yellowRaid = RaidCR(redRaid1);
-		StartCoroutine(yellowRaid);
-
-		IEnumerator redRaid = RaidCR(yellowRaid1);
-		StartCoroutine(redRaid);
-
+		for (int i = 0; i < raids.Length; i++) {
+			StartCoroutine(RaidCR(raids[i]));
+		}
 	}
+
 	public void Start() {
 		InitRaids();
 	}
 
 	public IEnumerator RaidCR(Raid raid) {
+		yield return new WaitForSeconds(raid.startDelay);
+
+		float startTime = Time.time;
 		while(true) {
-			GameObject enemy = Instantiate(enemyPrefab);
-			enemy.transform.SetParent(transform, true);
+			for (int i = 0; i < raid.numToSpawn; i++) {
+				GameObject enemy = Instantiate(enemyPrefab);
+				enemy.transform.SetParent(transform, true);
 
-			Vector2 randomPosition = Random.insideUnitCircle.normalized;
-			enemy.transform.position = (Vector3)randomPosition * 10f;
+				int laneToSpawn = Random.Range(0, numLanes);
+				float laneRadians = ((float) laneToSpawn / numLanes) * Mathfx.TAU;
+				Vector2 laneDirection = new Vector2(Mathf.Cos(laneRadians), Mathf.Sin(laneRadians));
+				enemy.transform.position = (Vector3) laneDirection * spawnRadius;
 
-			Enemy enemyScript = enemy.GetComponent<Enemy>();
-			enemyScript.Init(randomPosition * -1f, raid.color);
-			yield return new WaitForSeconds(raid.time);
+				Enemy enemyScript = enemy.GetComponent<Enemy>();
+				enemyScript.Init(laneDirection * -1f * raid.moveSpeed, raid.color);
+			}
+
+			yield return new WaitForSeconds(raid.interval);
+			if (startTime + raid.killTime > Time.time) {
+				yield break;
+			}
 		}
 	}
 }
