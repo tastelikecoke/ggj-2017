@@ -33,10 +33,12 @@ public class GameMgr : MonoBehaviour {
 	public LifeUpdater lifeUpdater;
 
 	public UnityEngine.UI.Text textTimer;
+	public UnityEngine.UI.Text textBestTimer;
 
 	float fuckTimer = 0f;
 
 	private float _timer = 0f;
+	private float _bestTimer;
 
 	StateMachine<GameStates> fsm;
 
@@ -81,6 +83,12 @@ public class GameMgr : MonoBehaviour {
 		Debug.Log("Game start state");
 		StopGameUnits();
 		_timer = 0f;
+		_bestTimer = PlayerPrefs.GetFloat("BestTime", 0f);
+		int minutes = (int)(_bestTimer/60);
+		int seconds = (int)(_bestTimer - minutes*(60));
+		string textMinutes = minutes > 9 ? ""+minutes : "0"+minutes;
+		string textSeconds = seconds > 9 ? ""+seconds : "0"+seconds;
+		textBestTimer.text = "Best Time: " + textMinutes + ":" + textSeconds;
 	}
 
 	void Start_Update() {
@@ -111,10 +119,19 @@ public class GameMgr : MonoBehaviour {
 		string textMinutes = minutes > 9 ? ""+minutes : "0"+minutes;
 		string textSeconds = seconds > 9 ? ""+seconds : "0"+seconds;
 		textTimer.text = textMinutes + ":" + textSeconds;
+
+		if (_timer > _bestTimer) {
+			_bestTimer = _timer;
+			PlayerPrefs.SetFloat("BestTime", _bestTimer);
+			int b_minutes = (int)(_bestTimer/60);
+			int b_seconds = (int)(_bestTimer - minutes*(60));
+			string b_textMinutes = minutes > 9 ? ""+minutes : "0"+minutes;
+			string b_textSeconds = seconds > 9 ? ""+seconds : "0"+seconds;
+			textBestTimer.text = "Best Time: " + b_textMinutes + ":" + b_textSeconds;
+		}
 	}
 
 	void Play_Exit() {
-
 	}
 	#endregion
 
