@@ -101,9 +101,13 @@ public class GameMgr : MonoBehaviour {
 	//lose state
 	#region LOSE_STATE
 	void Lose_Enter() {
-		StopGameUnits();
+		//StopGameUnits();
 		Debug.Log("you lost!");
 		//fade out to the title screen
+		FadeOutOverlay.Instance.FadeOut(1.5f, () => {
+			StopGameUnits();
+			UnityEngine.SceneManagement.SceneManager.LoadScene("Start");
+		}); //Application.LoadLevel("Start"));
 	}
 
 	void Lose_Update() {
