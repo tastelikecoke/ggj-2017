@@ -10,7 +10,7 @@ public class Projectile : MonoBehaviour {
 	public float sizeMultiplier;
 
 	EnemyColor color;
-	List<int> playerNumbers = new List<int>();
+	List<PlayerController> playerNumbers = new List<PlayerController>();
 
 	bool isMarkedForDestruction = false;
 
@@ -28,22 +28,24 @@ public class Projectile : MonoBehaviour {
 		transform.localScale = s;
 	}
 
-	public void AddPlayerNumber(int playerNumber) {
-		playerNumbers.Add(playerNumber);
+	public void AddPlayerNumber(PlayerController playerController) {
+		playerNumbers.Add(playerController);
 		UpdatePlayerNumbers();
 	}
 
 	void UpdatePlayerNumbers() {
 		if (playerNumbers.Count == 1) {
-			color = EnemyColorExtensions.GetEnemyColorFromPlayerNumber(playerNumbers[0]);
+			color = playerNumbers[0].shootColor;
 		} else if (playerNumbers.Count == 2) {
-			if (playerNumbers.Contains(1)) {
-				if (playerNumbers.Contains(2)) {
+
+
+			if (playerNumbers.Exists((p) => p.shootColor == EnemyColor.Red)) {
+				if (playerNumbers.Exists((p) => p.shootColor == EnemyColor.Yellow)) {
 					color = EnemyColor.Orange;
-				} else if (playerNumbers.Contains(3)) {
+				} else if (playerNumbers.Exists((p) => p.shootColor == EnemyColor.Blue)) {
 					color = EnemyColor.Violet;
 				}
-			} else if (playerNumbers.Contains(2)) {
+			} else if (playerNumbers.Exists((p) => p.shootColor == EnemyColor.Blue)) {
 				color = EnemyColor.Green;
 			}
 		}
@@ -76,7 +78,6 @@ public class Projectile : MonoBehaviour {
 
 		Enemy e = c.gameObject.GetComponent<Enemy>();
 		if (e != null) {
-			Debug.Log("Enemy is a dude!");
 			if (e.enemyColor == color) {
 				e.Explode();
 			}

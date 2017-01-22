@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour {
 	public Tower tower;
 	public GameObject projectilePrefab;
 
-	public EnemyColor shootColor;
+	public EnemyColor shootColor { get; protected set; }
 
 	float position = Mathf.Infinity; // in degrees
 	float arcMultiplier = 1f;
@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour {
 		Projectile p = g.GetComponent<Projectile>();
 		p.sizeMultiplier = arcMultiplier;
 		p.direction = v.normalized;
-		p.AddPlayerNumber(playerNumber);
+		p.AddPlayerNumber(this);
 		g.SetActive(true);
 
 		canArcGrow = false;
