@@ -10,6 +10,7 @@ public class Tower : MonoBehaviour {
 
 	public float radius;
 
+	public int MAX_LIVES = 10;
 	int _lives = 10;
 	public event Action eventOnLivesChange = () => {};
 
@@ -24,6 +25,9 @@ public class Tower : MonoBehaviour {
 		}
 	}
 
+	public void ResetLives() {
+		lives = MAX_LIVES;
+	}
 
 	void Awake() {
 		__instance = this;
