@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PingSpawner : MonoBehaviour {
 
@@ -8,6 +9,8 @@ public class PingSpawner : MonoBehaviour {
 	public float scale;
 	public float duration;
 	float nextPingTime;
+
+	List<GameObject> pings = new List<GameObject>();
 
 	void Start() {
 		nextPingTime = Time.time;	 
@@ -28,10 +31,22 @@ public class PingSpawner : MonoBehaviour {
 		g.SetActive(true);
 
 		LeanTween.scale(g, Vector3.one * scale, duration).setEase(LeanTweenType.easeOutSine);
-		LeanTween.value(1f, 0f, duration).setOnUpdate((f) => { 
-			Color c = g.GetComponent<SpriteRenderer>().color;
-			c.a = f;
-			g.GetComponent<SpriteRenderer>().color = c;
+		LeanTween.value(1f, 0f, duration).setOnUpdate((f) => {
+			if (g != null) {
+				Color c = g.GetComponent<SpriteRenderer>().color;
+				c.a = f;
+				g.GetComponent<SpriteRenderer>().color = c;
+			}
 		}).setOnComplete(() => Destroy (g));
+
+		pings.Add(g);
+	}
+
+	void OnDestroy() {
+		for (int i = 0; i < pings.Count; i++) {
+			if (pings[i] != null) {
+				LeanTween.cancel(pings[i]);
+			}
+		}
 	}
 }
