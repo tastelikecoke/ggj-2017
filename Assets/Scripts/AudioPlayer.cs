@@ -13,6 +13,9 @@ public class AudioPlayer : MonoBehaviour {
 	public AudioClip blueSFX;
 	public AudioClip yellowSFX;
 
+	public AudioClip explodeSFX;
+	public AudioClip switchSFX;
+
 	AudioSource audioSource;
 
 	void Awake() {
@@ -45,5 +48,13 @@ public class AudioPlayer : MonoBehaviour {
 
 	public void PlayYellowSFX() {
 		audioSource.PlayOneShot(yellowSFX);
+	}
+
+	public void PlaySwitchSFX() {
+		audioSource.PlayOneShot(switchSFX);
+	}
+
+	public void PlayExplodeSFX() {
+		audioSource.PlayOneShot(explodeSFX);
 	}
 }
