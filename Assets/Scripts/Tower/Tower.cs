@@ -24,18 +24,6 @@ public class Tower : MonoBehaviour {
 		}
 	}
 
-	void OnEnable() {
-		GameMgr.Instance.PubSubMgr.Subscribe(Channel.GameStart, OnGameStart);
-	}
-
-	void OnDisable() {
-		GameMgr.Instance.PubSubMgr.Unsubscribe(Channel.GameStart, OnGameStart);
-	}
-
-	public void OnGameStart(Signal data) {
-		//reset stuff here
-		_lives = GameMgr.Instance.GameConfig.maxHP;
-	}
 
 	void Awake() {
 		__instance = this;
