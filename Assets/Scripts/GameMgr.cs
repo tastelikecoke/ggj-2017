@@ -34,6 +34,8 @@ public class GameMgr : MonoBehaviour {
 
 	public UnityEngine.UI.Text textTimer;
 
+	float fuckTimer = 0f;
+
 	private float _timer = 0f;
 
 	StateMachine<GameStates> fsm;
@@ -95,6 +97,11 @@ public class GameMgr : MonoBehaviour {
 	}
 
 	void Play_Update() {
+		if (fuckTimer < 20f) {
+			fuckTimer += Time.deltaTime;
+			return;
+		}
+
 		if (tower.lives <= 0) {
 			fsm.ChangeState(GameStates.Lose);
 		}
