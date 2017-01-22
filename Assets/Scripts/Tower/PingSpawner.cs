@@ -29,9 +29,12 @@ public class PingSpawner : MonoBehaviour {
 
 		LeanTween.scale(g, Vector3.one * scale, duration).setEase(LeanTweenType.easeOutSine);
 		LeanTween.value(1f, 0f, duration).setOnUpdate((f) => { 
-			Color c = g.GetComponent<SpriteRenderer>().color;
-			c.a = f;
-			g.GetComponent<SpriteRenderer>().color = c;
+			if(g != null){
+
+				Color c = g.GetComponent<SpriteRenderer>().color;
+				c.a = f;
+				g.GetComponent<SpriteRenderer>().color = c;
+			}
 		}).setOnComplete(() => Destroy (g));
 	}
 }
