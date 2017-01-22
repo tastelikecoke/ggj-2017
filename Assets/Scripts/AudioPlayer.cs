@@ -43,7 +43,7 @@ public class AudioPlayer : MonoBehaviour {
 		audioSource.PlayOneShot(blueSFX);
 	}
 
-	public void YellowSFX() {
+	public void PlayYellowSFX() {
 		audioSource.PlayOneShot(yellowSFX);
 	}
 }
