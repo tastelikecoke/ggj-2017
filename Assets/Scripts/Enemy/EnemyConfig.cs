@@ -11,19 +11,13 @@ public enum RaidType {
 [System.Serializable]
 public class Raid {
 	public RaidType type;
-	public EnemyColor color;
+	public EnemySpawn color;
 
 	public float startDelay;
 	public float interval;
 	public float killTime;
 	public int numToSpawn;
 	public float moveSpeed;
-
-	public Raid(RaidType type, EnemyColor color, float interval){
-		this.type = type;
-		this.color = color;
-		this.interval = interval;
-	}
 }
 
 public class EnemyConfig : MonoBehaviour {
@@ -75,7 +69,7 @@ public class EnemyConfig : MonoBehaviour {
 				enemy.transform.position = (Vector3) laneDirection * spawnRadius;
 
 				Enemy enemyScript = enemy.GetComponent<Enemy>();
-				enemyScript.Init(laneDirection * -1f * raid.moveSpeed, raid.color);
+				enemyScript.Init(laneDirection * -1f * raid.moveSpeed, raid.color.GetEnemyColor());
 			}
 
 			yield return new WaitForSeconds(raid.interval);
